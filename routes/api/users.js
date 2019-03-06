@@ -7,6 +7,9 @@ const passport = require('passport');
 
 const keys = require('../../config/keys');
 
+//load Input validation
+const validteRegisterInput = require('../../validation/register');
+
 //Load user model
 const User = require('../../models/User');
 
@@ -21,6 +24,13 @@ router.get('/test', (req, res) => {
 //@desc     Register users
 //@access   Public
 router.post('/register', (req, res) => {
+  //check validation
+  const { errors, isValid } = validteRegisterInput(req.body);
+
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   //first check if the user already exists
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
@@ -57,7 +67,6 @@ router.post('/register', (req, res) => {
 //@route    GET api/users/login
 //@desc     Login user / Returning JWT token
 //@access   Public
-
 router.post('/login', (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
