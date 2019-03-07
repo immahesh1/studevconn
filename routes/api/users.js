@@ -9,6 +9,7 @@ const keys = require('../../config/keys');
 
 //load Input validation
 const validteRegisterInput = require('../../validation/register');
+const validLoginInput = require('../../validation/login');
 
 //Load user model
 const User = require('../../models/User');
@@ -26,7 +27,6 @@ router.get('/test', (req, res) => {
 router.post('/register', (req, res) => {
   //check validation
   const { errors, isValid } = validteRegisterInput(req.body);
-
   if (!isValid) {
     return res.status(400).json(errors);
   }
@@ -68,6 +68,12 @@ router.post('/register', (req, res) => {
 //@desc     Login user / Returning JWT token
 //@access   Public
 router.post('/login', (req, res) => {
+  //validation
+  const { errors, isValid } = validLoginInput(req.body);
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   const email = req.body.email;
   const password = req.body.password;
 
@@ -77,7 +83,8 @@ router.post('/login', (req, res) => {
       //check for user
       if (!user) {
         //if user is not found
-        return res.status(404).json({ email: 'User not found' });
+        errors.email = 'User not found';
+        return res.status(404).json(errors);
       }
 
       //check password (if user email is found)
@@ -104,7 +111,8 @@ router.post('/login', (req, res) => {
             }
           );
         } else {
-          res.status(400).json({ password: 'Password incorrect' });
+          errors.password = 'Incorrect password';
+          res.status(400).json(errors);
         }
       });
     });
