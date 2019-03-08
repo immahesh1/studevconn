@@ -16,17 +16,20 @@ module.exports = function validateRegisterInput(data) {
     errors.name = 'Name field required';
   }
 
-  if (Validator.isEmpty(data.email)) {
-    errors.email = 'Email field required';
-  }
   if (!Validator.isEmail(data.email)) {
     errors.email = 'Email is invalid';
   }
-  if (Validator.isEmpty(data.password)) {
-    errors.password = 'Password field required';
+
+  if (Validator.isEmpty(data.email)) {
+    errors.email = 'Email field required';
   }
+
   if (!Validator.isLength(data.password, { min: 6, max: 30 })) {
     errors.password = 'Password length must be between 6 and 30 character';
+  }
+
+  if (Validator.isEmpty(data.password)) {
+    errors.password = 'Password field required';
   }
 
   if (Validator.isEmpty(data.password2)) {

@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 //creating schema
 const ProfileSchema = new Schema({
   user: {
-    type: Schema.Types.ObjectId,
-    ref: 'users'
+    type: Schema.Types.ObjectId, //contains the userId(_id)
+    ref: 'users' //reference is of database
   },
   handle: {
     type: String,
@@ -19,8 +19,7 @@ const ProfileSchema = new Schema({
     type: String
   },
   location: {
-    type: String,
-    required: true
+    type: String
   },
   status: {
     type: String,
@@ -48,8 +47,7 @@ const ProfileSchema = new Schema({
         required: true
       },
       location: {
-        type: String,
-        required: true
+        type: String
       },
       from: {
         type: Date,
@@ -59,7 +57,7 @@ const ProfileSchema = new Schema({
         type: Date
       },
       current: {
-        type: boolean,
+        type: Boolean,
         default: false
       },
       description: {
@@ -90,7 +88,7 @@ const ProfileSchema = new Schema({
         type: Date
       },
       current: {
-        type: boolean,
+        type: Boolean,
         default: false
       },
       description: {
