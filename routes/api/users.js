@@ -8,7 +8,7 @@ const passport = require('passport');
 const keys = require('../../config/keys');
 
 //load Input validation
-const validteRegisterInput = require('../../validation/register');
+const validateRegisterInput = require('../../validation/register');
 const validLoginInput = require('../../validation/login');
 
 //Load user model
@@ -26,17 +26,16 @@ router.get('/test', (req, res) => {
 //@access   Public
 router.post('/register', (req, res) => {
   //check validation
-  const { errors, isValid } = validteRegisterInput(req.body);
+  const { errors, isValid } = validateRegisterInput(req.body);
   if (!isValid) {
     return res.status(400).json(errors);
   }
 
   //first check if the user already exists
   User.findOne({ email: req.body.email }).then(user => {
+    errors.email = 'User with this email already existes.';
     if (user) {
-      return res
-        .status(400)
-        .json({ email: 'User with this email already exists.' });
+      return res.status(400).json(errors);
     } else {
       const avatar = gravatar.url(req.body.email, {
         s: '200', //size
@@ -46,12 +45,15 @@ router.post('/register', (req, res) => {
       const newUser = new User({
         name: req.body.name,
         email: req.body.email,
-        avatar
+        avatar,
+        password: req.body.password
       });
 
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(newUser.password, salt, (err, hash) => {
-          if (err) throw err;
+          if (err) {
+            throw err;
+          }
           newUser.password = hash;
           newUser
             .save() //mongodb operation
