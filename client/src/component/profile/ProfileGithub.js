@@ -45,10 +45,12 @@ class ProfileGithub extends Component {
             <span className="badge badge-info mr-1">
               Stars: {repo.stargazers_count}
             </span>{' '}
-            <span class="badge badge-secondary mr-1">
+            <span className="badge badge-secondary mr-1">
               Watchers: {repo.watchers_count}
             </span>
-            <span class="badge badge-success">Forks: {repo.forks_count}</span>
+            <span className="badge badge-success">
+              Forks: {repo.forks_count}
+            </span>
           </div>
         </div>
       </div>
